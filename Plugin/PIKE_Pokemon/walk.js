@@ -2,6 +2,7 @@
   
 var MapChipSize          = 32;		// マップチップのサイズ（デフォルトはa32）
 var isWalkMapWindowDisp  = true;	// 歩行マップ左下の顔ウィンドウを表示するか（true:表示する false:検出しない）
+var globalUnit = null;
 
 
 
@@ -1223,6 +1224,7 @@ var MapCursorByUnit = defineObject(MapCursor,
 	
 	setUnit: function(unit) {
 		this._unit = unit;
+		globalUnit = unit
 	},
 	
 	getUnit: function() {
@@ -1267,7 +1269,7 @@ var MapCursorByUnit = defineObject(MapCursor,
 				continue;
 			}
 			
-			unit.setInvisible(true);
+			//unit.setInvisible(true);
 		}
 	},
 	
@@ -2590,6 +2592,8 @@ var MapCommandByUnit = defineObject(MapCommand,
 		var index;
 		
 		MapCommand.configureCommands.call(this, groupArray);
+
+		groupArray.appendObject(MapCommand.Item)
 		
 		// isUseTurnEndがtrueでなければターン終了を削除
 		if( isUseTurnEnd !== true ) {

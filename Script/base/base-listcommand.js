@@ -225,7 +225,7 @@ var BaseListCommand = defineObject(BaseCommand,
 var ListCommandScrollbar = defineObject(BaseScrollbar,
 {	
 	drawScrollContent: function(x, y, object, isSelect, index) {
-		var textui = this.getParentInstance().getCommandTextUI();
+		var textui = root.queryTextUI('mapcommand_title');
 		var color = textui.getColor();
 		var font = textui.getFont();
 		var pic = textui.getUIImage();

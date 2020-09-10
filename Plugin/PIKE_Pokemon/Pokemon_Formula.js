@@ -29,3 +29,25 @@ DamageCalculator.calculateDamage = function(active, passive, weapon, isCritical,
 		
 		return this.validValue(active, passive, weapon, damage);
 	}
+
+DamageCalculator.isHalveAttack = function(active, passive, weapon, isCritical, trueHitValue) {
+		var weaponPassive = ItemControl.getEquippedWeapon(passive);
+		
+		if (weaponPassive !== null && weaponPassive.getWeaponOption() === WeaponOption.HALVEATTACK) {
+			return true;
+		}
+
+
+		var list = active.getTurnStateList();
+		var count = list.getCount();
+					
+		for (i = 0; i < count; i++) {
+			turnState = list.getData(i);
+			if (turnState.getState().custom.burn === true) {
+				return true;				
+			}
+		}
+
+		
+		return SkillControl.getBattleSkillFromValue(passive, active, SkillType.BATTLERESTRICTION, BattleRestrictionValue.HALVEATTACK) !== null;
+	}
