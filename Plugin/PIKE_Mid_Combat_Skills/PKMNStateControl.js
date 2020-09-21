@@ -41,3 +41,19 @@ GameOverChecker.isGameOver = function() {
 		
 		return isGameOver;
 	}
+
+
+CheckPokemon = function(unit) {
+	var i, item;
+	var count = UnitItemControl.getPossessionItemCount(unit);
+
+		
+	for (i = 0; i < count; i++) {
+		item = UnitItemControl.getItem(unit, i)
+		if(item.getName() == enemyPokemon.getName()) {
+			return true;
+		}
+	}
+
+	return false;
+}

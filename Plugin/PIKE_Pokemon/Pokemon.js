@@ -121,10 +121,24 @@ var PokeballItemUse = defineObject(BaseItemUse,
 var PokeballAvailability = defineObject(BaseItemAvailability,
 {
 	isItemAllowed: function(unit, targetUnit, item) {
-		if(inBattle) {
+		var count = UnitItemControl.getPossessionItemCount(this._unit);
+		var num = 0;
+		
+		for (i = 0; i < count; i++) {
+			tempItem = UnitItemControl.getItem(this._unit, i)
+				if(tempItem.custom.pokemon) {
+					num++;
+				}
+			}
+
+		if(num > 6) {
+			return false;
+		}
+
+		if(inBattle && isWild &&!CheckPokemon(unit)) {
 			return true;
 		}
-		else{
+		else {
 			return false;
 		}
 	}

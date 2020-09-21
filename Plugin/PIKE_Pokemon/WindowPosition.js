@@ -15,33 +15,7 @@ UnitCommand.Item.getPositionX = function() {
 }
 
 
-ItemSelectMenu.isWorkAllowed = function(index) {
-		var result = false;
-		var item = this._itemListWindow.getCurrentItem();
-		
-		if (item.isWeapon()) {
-			if (index === 0) {
-				if(!inBattle)
-					result = ItemControl.isWeaponAvailable(this._unit, item);
-				else
-					result = false;
-			}
-			else if (index === 1) {
-				result = !item.isImportance();
-			}
 
-		}
-		else {
-			if (index === 0) {
-				result = this._isItemUsable(item);
-			}
-			else if (index === 1) {
-				result = !item.isImportance();
-			}
-		}
-		
-		return result;
-	}
 
 
 StateRecoveryItemUse.getItemAnimePos = function(itemUseParent, animeData) {

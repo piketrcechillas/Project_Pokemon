@@ -7,10 +7,23 @@ DamageCalculator.calculateDamage = function(active, passive, weapon, isCritical,
 		
 		pow = this.calculateAttackPower(active, passive, weapon, isCritical, activeTotalStatus, trueHitValue);
 		def = this.calculateDefense(active, passive, weapon, isCritical, passiveTotalStatus, trueHitValue);
+
+		var weaponPow;
+
+		root.log("PKMFAINT?" + pkmFainted)
+
+		if(pkmFainted && weapon.custom.retaliate) {
+			root.log("DOUBLE!")
+			weaponPow = weapon.getPow()*2;
+		}
+		else {
+			root.log("NOT DOUBLE!")
+			weaponPow = weapon.getPow();
+		}
 		
 		var random = ((Math.random()*(100-85)+1) + 85)/100;
 
-		damage = Math.floor( ((((2*active.getLv() + 10)/250) * weapon.getPow() * (pow/def))-3)*random)
+		damage = Math.floor( ((((2*active.getLv() + 10)/250) * weaponPow * (pow/def))-3)*random)
 
 
 		if (this.isHalveAttack(active, passive, weapon, isCritical, trueHitValue)) {
@@ -50,4 +63,27 @@ DamageCalculator.isHalveAttack = function(active, passive, weapon, isCritical, t
 
 		
 		return SkillControl.getBattleSkillFromValue(passive, active, SkillType.BATTLERESTRICTION, BattleRestrictionValue.HALVEATTACK) !== null;
+	}
+
+ExperienceCalculator._getExperienceFactor = function(unit) {
+		var skill;
+		var factor = 100;
+		var option = root.getMetaSession().getDifficulty().getDifficultyOption();
+		
+		if (option & DifficultyFlag.GROWTH) {
+			factor = 200;
+		}
+		
+		skill = SkillControl.getBestPossessionSkill(unit, SkillType.GROWTH);
+		if (skill !== null) {
+			factor = skill.getSkillValue();
+		}
+
+		root.log("WILD?" + isWild)
+
+		if(!isWild) {
+			factor = 200;
+		}
+		
+		return factor / 100;
 	}

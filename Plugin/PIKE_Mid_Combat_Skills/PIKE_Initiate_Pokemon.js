@@ -196,3 +196,4 @@ ForceBattleEventCommand._createAttackParam = function() {
 		
 		return attackParam;
 	}
+

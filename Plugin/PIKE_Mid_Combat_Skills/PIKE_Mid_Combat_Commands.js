@@ -294,8 +294,13 @@ UnitCommand.Item._moveTop = function() {
 					}
 				}
 				else {
-					this._useItem();
-					this.changeCycleMode(ItemCommandMode.USE);
+					if(item.getItemType() != ItemType.RESURRECTION) {
+						this._useItem();
+						this.changeCycleMode(ItemCommandMode.USE);
+					}
+					else {
+						this.changeCycleMode(ItemCommandMode.SELECTION);
+					}
 				}
 			}
 		}

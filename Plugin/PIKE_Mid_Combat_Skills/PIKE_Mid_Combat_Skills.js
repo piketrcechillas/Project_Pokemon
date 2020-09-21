@@ -41,6 +41,7 @@ var trainer = null;
 var enemyTrainer = null;
 
 var swap = false;
+var pkmFainted = false;
 
 
 
@@ -472,6 +473,7 @@ RealBattle._moveWeaponSelect= function() {
 
 				
 				this._processModeActionStart();
+				pkmFainted = false;
 
 		}
 
@@ -1433,6 +1435,31 @@ UIBattleLayout._showDamageAnime = function(battler, isCritical, isFinish) {
 			this._showDamagePopup(battler, this._realBattle.getAttackOrder().getPassiveFullDamage(), isCritical);
 		}
 	}
+
+UIBattleLayout._drawNameArea = function(unit, isRight) {
+		var x, y, range;
+		var text = unit.getName();
+		var color = ColorValue.DEFAULT;
+		var font = TextRenderer.getDefaultFont();
+		var dx = this._getIntervalX();
+		
+		if (isRight) {
+			x = 330 + dx;
+			y = 385;
+		}
+		else {
+			x = 115 + dx;
+			y = 385;
+			if(CheckPokemon(trainer)) {
+				tempX = x + 20;
+				graphicsHandle = root.createResourceHandle(false, 2, 0, 0, 0);
+				GraphicsRenderer.drawImage(tempX, y, graphicsHandle, GraphicsType.ICON);
+			}
+		}
+		
+		range = createRangeObject(x, y, 185, 25);
+		TextRenderer.drawRangeText(range, TextFormat.CENTER, text, -1, color, font);
+	}
 	
 UIBattleLayout._isDamageEffectAsync = function() {
 		// If "Weapon Effects" is set, the battle tempo gets better by returning true with this method.
@@ -1506,6 +1533,11 @@ UnitItemControl.getParalyzeWeapon = function(unit) {
 
 
 GameOverChecker.checkAvailablePokemon = function() {
+
+	if(!root.getMetaSession().getGlobalSwitchTable().isSwitchOn(5)) {
+		return true;
+	}
+
 	var list = PlayerList.getSortieList();
 	var count = list.getCount();
 
@@ -1535,6 +1567,7 @@ RealBattle._moveBattleEnd = function() {
 					this._killingUnit = this._order.getActiveUnit();
 					this._lock = true;
 					trainer.custom.emergency = true
+					pkmFainted = true;
 
 					root.log("CURRENT POKEMON!:" + ItemControl.getEquippedWeapon(trainer).getName() + "/" + unit.getName())
 
