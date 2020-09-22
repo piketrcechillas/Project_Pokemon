@@ -67,6 +67,23 @@ RecoveryItemUse.enterMainUseCycle = function(itemUseParent) {
 				recoveryInfo.getRecoveryValue() + plus, recoveryInfo.getRecoveryType(), true);
 		}
 		
+		if(itemTargetInfo.item.custom.cleanse) {
+			arr = [];
+			list = itemTargetInfo.targetUnit.getTurnStateList();
+			count = list.getCount();
+			for (i = 0; i < count; i++) {
+				state = list.getData(i).getState();
+				if (state.isBadState()) {
+					arr.push(state);	
+				}
+			}
+			
+			count = arr.length;
+			for (i = 0; i < count; i++) {
+				StateControl.arrangeState(itemTargetInfo.targetUnit, arr[i], IncreaseType.DECREASE);
+			}
+		}
+
 		return this._dynamicEvent.executeDynamicEvent();
 	}
 

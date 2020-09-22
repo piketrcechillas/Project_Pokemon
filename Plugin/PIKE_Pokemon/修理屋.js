@@ -476,7 +476,7 @@ var DurabilityItemSale = defineObject(ItemSale,		// ItemSaleの派生
 			this._durabilityItem(item);
 		}
 		else {
-			this._cutSellItem(item);
+			this._durabilitySellItem(item);
 		}
 		
 		this._setPrice(price);
@@ -486,10 +486,28 @@ var DurabilityItemSale = defineObject(ItemSale,		// ItemSaleの派生
 	
 	_durabilityItem: function(item) {
 		var unit = this._parentShopScreen.getVisitor();
-		var increaseType = IncreaseType.ASSIGNMENT;
+		var increaseType = IncreaseType.INCREASE;
 		var generator = root.getEventGenerator();
-		var durability = item.getLimitMax();
+		var durability = 1;
 
+		if( unit != null ) {
+			generator.itemDurabilityChange(unit, item, durability, increaseType, isSkipDurability);
+		}
+		else {
+			generator.stockDurabilityChange(item, durability, increaseType, isSkipDurability);
+		}
+		generator.execute();
+	},
+
+	_durabilitySellItem: function(item) {
+		var i, count;
+		root.log("SELL")
+		var unit = this._parentShopScreen.getVisitor();
+		var increaseType = IncreaseType.DECREASE;
+		var generator = root.getEventGenerator();
+		var durability = 1;
+		
+		
 		if( unit != null ) {
 			generator.itemDurabilityChange(unit, item, durability, increaseType, isSkipDurability);
 		}
@@ -550,7 +568,7 @@ var DurabilitySellWindow = defineObject(BuySellWindow,	// BuySellWindowの派生
 	},
 
 	getSelectTextArray: function() {
-		var arr = ['修理', StringTable.ShopLayout_SelectSell];
+		var arr = [StringTable.ShopLayout_SelectBuy, StringTable.ShopLayout_SelectSell];
 		return arr;
 	}
 }
@@ -750,21 +768,8 @@ Calculator.calculateDurabilityPrice= function(item) {
 		}
 
 		// 修理金額算出
-		var gold = item_priginal.getGold() *repair_percent / 100;
-		
-		if (item.getLimitMax() === 0) {
-			d = 1;
-		}
-		else {
-			// 残り耐久値の下限値は0とする（武器が破損する設定の場合、残り耐久度マイナスがありえるため）
-			var limit = item.getLimit();
-			if( limit < 0 ){
-				limit = 0;
-			}
-			d = (item.getLimitMax() - limit) / item.getLimitMax();
-		}
-		
-		gold = Math.floor(gold * d);
+		var gold = item_priginal.getGold();
+
 		return gold;
 };
 
@@ -779,21 +784,11 @@ ItemControl._isItemRepairable= function(unit, item) {
 //		if (unit === null) {
 //			return false;
 //		}
+		if(item.isWeapon()) {
+			return false;
+		}
 		
-		if (item.isWeapon()) {
-			return true;
-		}
-		else if(item.isWand()) {
-			return true;
-		}
-		// 武器タイプ追加の場合
-		else if( typeof isWandTypeExtra !== 'undefined' ) {
-			if( WandChecker.isWand(item) ) {
-				return true;
-			}
-		}
-
-		return false;
+		return true;
 };
 
 
@@ -851,9 +846,9 @@ var ItemSaleForRest = defineObject(DurabilityItemSale,		// ItemSaleの派生
 {
 	_durabilityItem: function(item) {
 		var unit = this._parentShopScreen.getVisitor();
-		var increaseType = IncreaseType.ASSIGNMENT;
+		var increaseType = IncreaseType.INCREASE;
 		var generator = root.getEventGenerator();
-		var durability = item.getLimitMax();
+		var durability = 1;
 		var durabilityUnit;
 
 		if( unit != null ) {
@@ -1041,3 +1036,9 @@ var DurabilityScrollbarForRest = defineObject(DurabilityScrollbar,
 );
 
 
+Calculator.calculateSellPrice = function(item) {
+		var d;
+		var gold = Math.floor(item.getGold()/2)
+		
+		return gold;
+	}

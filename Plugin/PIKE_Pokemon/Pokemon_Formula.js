@@ -65,25 +65,3 @@ DamageCalculator.isHalveAttack = function(active, passive, weapon, isCritical, t
 		return SkillControl.getBattleSkillFromValue(passive, active, SkillType.BATTLERESTRICTION, BattleRestrictionValue.HALVEATTACK) !== null;
 	}
 
-ExperienceCalculator._getExperienceFactor = function(unit) {
-		var skill;
-		var factor = 100;
-		var option = root.getMetaSession().getDifficulty().getDifficultyOption();
-		
-		if (option & DifficultyFlag.GROWTH) {
-			factor = 200;
-		}
-		
-		skill = SkillControl.getBestPossessionSkill(unit, SkillType.GROWTH);
-		if (skill !== null) {
-			factor = skill.getSkillValue();
-		}
-
-		root.log("WILD?" + isWild)
-
-		if(!isWild) {
-			factor = 200;
-		}
-		
-		return factor / 100;
-	}

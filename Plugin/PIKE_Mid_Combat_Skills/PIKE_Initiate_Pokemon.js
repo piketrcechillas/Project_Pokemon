@@ -106,9 +106,12 @@ ForceBattleEventCommand._prepareEventCommandMemberData = function() {
 			var MapInfo = root.getCurrentSession().getCurrentMapInfo()
 			var TargetList = MapInfo.getListFromUnitGroup(UnitGroup.ENEMYEVENT)
 
+			var id = enemyTrainer.custom.id;
+
 			for (i = 0; i < TargetList.getCount(); i++){
-					if (TargetList.getData(i).getName() === enemyPkmName){
-						enemyPkm = TargetList.getData(i)
+					var temp = TargetList.getData(i)
+					if (temp.getName() === enemyPkmName && temp.custom.id == id){
+						enemyPkm = temp;
 					}
 				}
 			targetUnit = root.getObjectGenerator().generateUnitFromBaseUnit(enemyPkm);

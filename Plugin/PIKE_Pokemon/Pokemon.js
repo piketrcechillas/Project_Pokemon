@@ -121,11 +121,11 @@ var PokeballItemUse = defineObject(BaseItemUse,
 var PokeballAvailability = defineObject(BaseItemAvailability,
 {
 	isItemAllowed: function(unit, targetUnit, item) {
-		var count = UnitItemControl.getPossessionItemCount(this._unit);
+		var count = UnitItemControl.getPossessionItemCount(unit);
 		var num = 0;
 		
 		for (i = 0; i < count; i++) {
-			tempItem = UnitItemControl.getItem(this._unit, i)
+			tempItem = UnitItemControl.getItem(unit, i)
 				if(tempItem.custom.pokemon) {
 					num++;
 				}
