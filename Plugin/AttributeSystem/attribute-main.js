@@ -56,7 +56,9 @@ var AttributeControl = {
 		{name: 'Fire', show: true},
 		{name: 'Water', show: true},
 		{name: 'Wind', show: true},
-		{name: 'Grass', show: true}
+		{name: 'Grass', show: true},
+		{name: 'Electric', show: true},
+		{name: 'Flying', show: true}
 	],
 	
 	//objのnullチェック+属性の設定がされているか

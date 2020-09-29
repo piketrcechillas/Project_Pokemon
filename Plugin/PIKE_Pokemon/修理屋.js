@@ -586,6 +586,7 @@ var DurabilityQuestionWindow = defineObject(BuyQuestionWindow,	// BuyQuestionWin
 	moveWindowContent: function() {
 		var input = this._scrollbar.moveInput();
 		var result = BuyQuestionResult.NONE;
+		var item = this.getParentInstance().getSelectItem();
 		
 		if (input === ScrollbarInput.SELECT) {
 			if (this._scrollbar.getIndex() === 0) {
@@ -1041,4 +1042,20 @@ Calculator.calculateSellPrice = function(item) {
 		var gold = Math.floor(item.getGold()/2)
 		
 		return gold;
+	}
+
+SellQuestionWindow._isSellOk = function() {
+
+		root.log("CHECK2")
+	
+		var item = this.getParentInstance().getSelectItem();
+		var result = !item.isImportance();
+
+		if(item.getLimit() == -1) {
+			root.log("CHECK")
+			return false;
+		}
+
+		// Sell it if it's not the important item.
+		return result
 	}

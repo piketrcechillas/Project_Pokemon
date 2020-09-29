@@ -400,6 +400,22 @@ RealBattle._moveWeaponSelect= function() {
 				var activeSpd = ParamBonus.getMov(this._order.getActiveUnit());
 				var passiveSpd = ParamBonus.getMov(this._order.getPassiveUnit());
 
+				
+
+				var activeWpn = ItemControl.getEquippedWeapon(this._order.getActiveUnit());
+				var passiveWpn = ItemControl.getEquippedWeapon(this._order.getPassiveUnit());
+
+				if(activeWpn.custom.quick) {
+					activeSpd = activeSpd * 99;
+				}
+
+				if(passiveWpn.custom.quick) {
+					passiveSpd = passiveSpd * 99;
+				}
+				
+
+				root.log("activeSpd" + activeSpd + "/passiveSpd" + passiveSpd)
+
 				if(StateControl.getTurnStatePersist(this._order.getActiveUnit()) != null){
 					state = StateControl.getTurnStatePersist(this._order.getActiveUnit()) 
 					if(state.custom.paralyze) {
@@ -575,6 +591,8 @@ RealBattle._movePokemonSelect= function() {
 
 				var activeSpd = ParamBonus.getMov(targetUnit);
 				var passiveSpd = ParamBonus.getMov(enemyUnit);
+
+
 
 				if(StateControl.getTurnStatePersist(targetUnit) != null){
 					state = StateControl.getTurnStatePersist(targetUnit) 
@@ -1451,7 +1469,7 @@ UIBattleLayout._drawNameArea = function(unit, isRight) {
 			x = 115 + dx;
 			y = 385;
 			if(CheckPokemon(trainer)) {
-				tempX = x + 20;
+				tempX = x + 150;
 				graphicsHandle = root.createResourceHandle(false, 2, 0, 0, 0);
 				GraphicsRenderer.drawImage(tempX, y, graphicsHandle, GraphicsType.ICON);
 			}
